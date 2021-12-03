@@ -1,28 +1,34 @@
 let minValue = parseInt(prompt('Минимальное значение числа для игры','0'));
 let maxValue = parseInt(prompt('Максимальное значение числа для игры','100'));
 alert(`Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`);
-let answerNumber  = Math.floor((minValue + maxValue) / 2);
+let answerNumber  = returnAnswerNumber();
 let orderNumber = 1;
 let gameRun = true;
 
 const orderNumberField = document.querySelector('#orderNumberField');
 const answerField = document.querySelector('#answerField');
 
-orderNumberField.innerText = orderNumber;
-answerField.innerText = `Вы загадали число ${answerNumber }?`;
-
-document.querySelector('#btnRetry').addEventListener('click', function () {
-    gameRun = true;
-    //minValue = parseInt(prompt('Минимальное значение числа для игры','0'));
-    //maxValue = parseInt(prompt('Максимальное значение числа для игры','100'));
-    orderNumber = 1;
-    orderNumberField.innerText = orderNumber;
-    answerNumber  = Math.floor((minValue + maxValue) / 2);
-    answerField.innerText = `Вы загадали число ${answerNumber }?`;
-})
+innerOrderNumber();
+returnMessageAnswerNumber();
 
 function returnRandom(n){
     return Math.round( Math.random() * n);
+}
+
+function returnAnswerNumber(){
+    return Math.floor((minValue + maxValue) / 2);
+}
+
+function returnAnswerAddOne(){
+    return answerNumber + 1;
+}
+
+function returnMessageAnswerNumber(){
+    return answerField.innerText = `Вы загадали число ${answerNumber }?`;
+}
+
+function innerOrderNumber(){
+    return orderNumberField.innerText = orderNumber;
 }
 
 function OverOrLess(border){
@@ -50,18 +56,28 @@ function OverOrLess(border){
             gameRun = false;
         } else {
             if (maxValue === border){
-                maxValue = answerNumber  + 1;
-                answerNumber = Math.floor((minValue + maxValue) / 2);
+                maxValue = returnAnswerAddOne();
+                answerNumber = returnAnswerNumber();
             } else if (minValue === border){
-                minValue = answerNumber  + 1;
-                answerNumber = Math.floor((minValue + maxValue) / 2);
+                minValue = returnAnswerAddOne();
+                answerNumber = returnAnswerNumber();
             }
             orderNumber++;
-            orderNumberField.innerText = orderNumber;
-            answerField.innerText = `Вы загадали число ${answerNumber }?`;
+            innerOrderNumber();
+            returnMessageAnswerNumber();
         }
     }
 }
+
+document.querySelector('#btnRetry').addEventListener('click', function () {
+    gameRun = true;
+    //minValue = parseInt(prompt('Минимальное значение числа для игры','0'));
+    //maxValue = parseInt(prompt('Максимальное значение числа для игры','100'));
+    orderNumber = 1;
+    innerOrderNumber();
+    answerNumber  = returnAnswerNumber();
+    returnMessageAnswerNumber();
+})
 
 document.querySelector('#btnOver').addEventListener('click', function () {
     OverOrLess(minValue);
